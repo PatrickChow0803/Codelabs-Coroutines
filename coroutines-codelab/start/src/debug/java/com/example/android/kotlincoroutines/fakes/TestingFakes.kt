@@ -45,7 +45,7 @@ class TitleDaoFake(initialTitle: String) : TitleDao {
      */
     private val insertedForNext = Channel<Title>(capacity = Channel.BUFFERED)
 
-    override fun insertTitle(title: Title) {
+    override suspend fun insertTitle(title: Title) {
         insertedForNext.offer(title)
         _titleLiveData.value = title
     }
@@ -90,28 +90,28 @@ class TitleDaoFake(initialTitle: String) : TitleDao {
 /**
  * Testing Fake implementation of MainNetwork
  */
-class MainNetworkFake(var result: String) : MainNetwork {
-    override fun fetchNextTitle() = MakeCompilerHappyForStarterCode() // TODO: replace with `result`
-}
-
-/**
- * Testing Fake for MainNetwork that lets you complete or error all current requests
- */
-class MainNetworkCompletableFake(): MainNetwork {
-    private var completable = CompletableDeferred<String>()
-
-    override fun fetchNextTitle() = MakeCompilerHappyForStarterCode() // TODO: replace with `completable.await()`
-
-    fun sendCompletionToAllCurrentRequests(result: String) {
-        completable.complete(result)
-        completable = CompletableDeferred()
-    }
-    fun sendErrorToCurrentRequests(throwable: Throwable) {
-        completable.completeExceptionally(throwable)
-        completable = CompletableDeferred()
-    }
-
-}
+//class MainNetworkFake(var result: String) : MainNetwork {
+////    override suspend fun fetchNextTitle() = MakeCompilerHappyForStarterCode() // TODO: replace with `result`
+//}
+//
+///**
+// * Testing Fake for MainNetwork that lets you complete or error all current requests
+// */
+//class MainNetworkCompletableFake(): MainNetwork {
+//    private var completable = CompletableDeferred<String>()
+//
+////    override suspend fun fetchNextTitle(): String = MakeCompilerHappyForStarterCode() // TODO: replace with `completable.await()`
+//
+//    fun sendCompletionToAllCurrentRequests(result: String) {
+//        completable.complete(result)
+//        completable = CompletableDeferred()
+//    }
+//    fun sendErrorToCurrentRequests(throwable: Throwable) {
+//        completable.completeExceptionally(throwable)
+//        completable = CompletableDeferred()
+//    }
+//
+//}
 
 typealias MakeCompilerHappyForStarterCode = FakeCallForRetrofit<String>
 
